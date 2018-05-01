@@ -6,11 +6,13 @@ from hardwareInteractions import solidEyesOnPi, turnOffEyesOnPi
 #####################
 # Config
 #####################
-workerBeeEndpoint = 'http://104.236.192.112:3001'
+# workerBeeEndpoint = 'http://104.236.192.112:3001'
+workerBeeEndpoint = 'https://iotcatapplication.apps.exosite.io'
 arbitrary = '/arbitrary'
-githubWebHooks = '/github-webhooks'
+# githubWebHooks = '/github-webhooks'
+githubWebHooks = '/pullRequest'
 pollingDelaySeconds = 10
-reactionTimeHold = 120
+reactionTimeHold = 60
 pollStartTime = time.time()
 
 # Action Types
@@ -18,9 +20,9 @@ eyesFlash = 'eyesFlash'
 eyesSolid = 'eyesSolid'
 
 # Setup an initial action for startup
-actionData = {}
-actionData["time"] = 'initialTime'
-actionData["action"] = 'intitialAction'
+actionData = [["2018-05-01T03:38:21.582000+00:00", "closed", 3]]
+# actionData["time"] = 'initialTime'
+# actionData["action"] = 'intitialAction'
 
 # Setup a reaction for the IOTCat
 reaction = {}
@@ -36,7 +38,7 @@ reaction["active"] = False
 # Get data from endpoint function
 def getData():
     latestData = urllib2.urlopen(workerBeeEndpoint + githubWebHooks).read()
-    parsedData = json.loads(latestData)["data"]
+    parsedData = json.loads(latestData)["values"]
     print '\nparsedData', parsedData, '\n'
     return parsedData
 
@@ -83,17 +85,17 @@ while (True):
         parsedData = getData()
     
     # Check if the action is new by comparing the timestamp to the last action that we got
-    if (parsedData["time"] != actionData["time"]):
+    if (parsedData[0][0] != actionData[0][0]):
 
         # It's new, so update our cache
         actionData = parsedData
 
         # Set any new actions
-        if (actionData["action"] ==  'opened'):
+        if (actionData[0][1] ==  'opened'):
             print 'Pull request opened! Lets turn the eyes on!'
             setReaction(eyesSolid)
 
-        if (actionData["action"] == 'closed'):
+        if (actionData[0][1] == 'closed'):
             print 'Pull request closed! Lets flash the eyes!'
             setReaction(eyesFlash)
     
