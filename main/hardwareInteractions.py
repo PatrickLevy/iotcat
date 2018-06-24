@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import time
 
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 # GPIO.setmode(GPIO.BCM)
 # GPIO.setwarnings(False)
@@ -14,10 +14,10 @@ import time
 
 def solidEyesOnPi():
     print 'The eyes have been turned on!'
-    # GPIO.setmode(GPIO.BCM)
-    # GPIO.setwarnings(False)
-    # GPIO.setup(18,GPIO.OUT)
-    # GPIO.output(18,GPIO.HIGH)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(18,GPIO.OUT)
+    GPIO.output(18,GPIO.HIGH)
 
 # def flashEyesOnPi():
 #     print 'The eyes are flashing!'
@@ -31,3 +31,7 @@ def solidEyesOnPi():
 
 def turnOffEyesOnPi():
     print 'The eyes were turned off!'
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(18,GPIO.OUT)
+    GPIO.output(18,GPIO.LOW)

@@ -9,6 +9,9 @@ from hardwareInteractions import solidEyesOnPi, turnOffEyesOnPi
 workerBeeEndpoint = 'http://104.236.192.112:3001'
 arbitrary = '/arbitrary'
 githubWebHooks = '/github-webhooks'
+muranoIoTCatEndpoint = 'https://iotcatapplication.apps.exosite.io/'
+iotCatPullRequests = '/pullRequest'
+
 pollingDelaySeconds = 10
 reactionTimeHold = 120
 pollStartTime = time.time()
@@ -35,8 +38,9 @@ reaction["active"] = False
 
 # Get data from endpoint function
 def getData():
-    latestData = urllib2.urlopen(workerBeeEndpoint + githubWebHooks).read()
-    parsedData = json.loads(latestData)["data"]
+    #latestData = urllib2.urlopen(workerBeeEndpoint + githubWebHooks).read()
+    latestData = urllib2.urlopen(muranoIoTCatEndpoint + iotCatPullRequests).read()
+    parsedData = json.loads(latestData)["values"][0]
     print '\nparsedData', parsedData, '\n'
     return parsedData
 
@@ -83,17 +87,18 @@ while (True):
         parsedData = getData()
     
     # Check if the action is new by comparing the timestamp to the last action that we got
-    if (parsedData["time"] != actionData["time"]):
+    if (parsedData[0] != actionData['time']):
 
         # It's new, so update our cache
-        actionData = parsedData
+        actionData['time'] = parsedData[0]
+	actionData['action'] = parsedData[1]
 
         # Set any new actions
-        if (actionData["action"] ==  'opened'):
+        if (actionData['action'] ==  'opened'):
             print 'Pull request opened! Lets turn the eyes on!'
             setReaction(eyesSolid)
 
-        if (actionData["action"] == 'closed'):
+        if (actionData['action'] == 'closed'):
             print 'Pull request closed! Lets flash the eyes!'
             setReaction(eyesFlash)
     
