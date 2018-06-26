@@ -16,8 +16,12 @@ def solidEyesOnPi():
     print 'The eyes have been turned on!'
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
+    
     GPIO.setup(18,GPIO.OUT)
     GPIO.output(18,GPIO.HIGH)
+    
+    GPIO.setup(17,GPIO.OUT)
+    GPIO.output(17,GPIO.HIGH)
 
 # def flashEyesOnPi():
 #     print 'The eyes are flashing!'
@@ -33,5 +37,9 @@ def turnOffEyesOnPi():
     print 'The eyes were turned off!'
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
+    
     GPIO.setup(18,GPIO.OUT)
     GPIO.output(18,GPIO.LOW)
+    
+    GPIO.setup(17,GPIO.OUT)
+    GPIO.output(17,GPIO.LOW)
